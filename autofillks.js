@@ -36,10 +36,48 @@
         const response = await fetch(sheetURL);
         const csvText = await response.text();
 
-        const rows = csvText
-            .split("\n")
-            .slice(1) // remove header
-            .map(r => r.split(","));
+        function parseCSV(text) {
+            const rows = [];
+            let row = [];
+            let value = '';
+            let insideQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"' && insideQuotes && nextChar === '"') {
+                    value += '"';
+                    i++;
+                } 
+                else if (char === '"') {
+                    insideQuotes = !insideQuotes;
+                } 
+                else if (char === ',' && !insideQuotes) {
+                    row.push(value);
+                    value = '';
+                } 
+                else if ((char === '\n' || char === '\r') && !insideQuotes) {
+                    if (value !== '' || row.length > 0) {
+                        row.push(value);
+                        rows.push(row);
+                        row = [];
+                        value = '';
+                    }
+                } 
+                else {
+                    value += char;
+                }
+            }
+
+            if (value !== '') {
+                row.push(value);
+                rows.push(row);
+            }
+
+        return rows;
+        }
+        const rows = parseCSV(csvText).slice(1);
 
         // 4️⃣ Find matching row
         const match = rows.find(row =>
