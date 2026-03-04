@@ -106,39 +106,38 @@
         });
 
         // --------- FIELD 1: Họ và tên bé (input 9) ---------
-        const babyNameField = visible[9];
-        babyNameField.focus();
-        babyNameField.value = data[7];
-        babyNameField.dispatchEvent(new Event('input', { bubbles: true }));
+        const babyNameInput = elements[9];
+        babyNameInput.focus();
+        babyNameInput.value = data[7];
+        babyNameInput.dispatchEvent(new Event("input", { bubbles: true }));
 
+        function setInputWithEnter(input, value) {
+            input.focus();
 
+            // Clear existing value
+            input.value = "";
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+
+            // Type value
+            input.value = value;
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+
+            // Press Enter
+            input.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                    bubbles: true,
+                    cancelable: true,
+                      key: "Enter",
+                    code: "Enter",
+                    keyCode: 13,
+                    which: 13
+                })
+            );
+        }
         // --------- FIELD 2: Giới tính (input 12) ---------
-        const genderField = visible[12];
 
-        genderField.focus();
-        genderField.value = ""; // clear first
-        genderField.dispatchEvent(new Event('input', { bubbles: true }));
-        
-        // Type value
-        genderField.value = data[11];
-        genderField.dispatchEvent(new Event('input', { bubbles: true }));
-
-        // Simulate Enter key
-        genderField.dispatchEvent(new KeyboardEvent('keydown', {
-            key: "Enter",
-            code: "Enter",
-            keyCode: 13,
-            which: 13,
-            bubbles: true
-        }));
-
-        genderField.dispatchEvent(new KeyboardEvent('keyup', {
-            key: "Enter",
-            code: "Enter",
-            keyCode: 13,
-            which: 13,
-            bubbles: true
-        }));
+        const genderInput = elements[12];
+        setInputWithEnter(genderInput, data[11]); // "Nam" or "Nữ"
 
         alert("Test autofill completed for 2 fields.");
 
