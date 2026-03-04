@@ -55,45 +55,54 @@
         // 5️⃣ Extract all data
         const data = match;
 
-        alert(
-        "===== MATCH FOUND =====\n\n" +
+       // ===== TEST AUTO FILL 2 FIELDS =====
 
-        "Timestamp: " + data[0] + "\n\n" +
+        // Get visible form elements in same order as your labeling script
+        const elements = document.querySelectorAll("input, select, textarea");
+        let visible = [];
 
-        "--- Người yêu cầu ---\n" +
-        "Họ và tên: " + data[1] + "\n" +
-        "Số hộ chiếu: " + data[2] + "\n" +
-        "Nơi cấp hộ chiếu: " + data[3] + "\n" +
-        "Ngày cấp hộ chiếu: " + data[4] + "\n" +
-        "Nơi cư trú: " + data[5] + "\n" +
-        "Quan hệ: " + data[6] + "\n\n" +
+        elements.forEach(el => {
+            if (el.offsetParent !== null) {
+                visible.push(el);
+            }
+        });
+
+        // --------- FIELD 1: Họ và tên bé (input 9) ---------
+        const babyNameField = visible[9];
+        babyNameField.focus();
+        babyNameField.value = data[7];
+        babyNameField.dispatchEvent(new Event('input', { bubbles: true }));
+
+
+        // --------- FIELD 2: Giới tính (input 12) ---------
+        const genderField = visible[12];
+
+        genderField.focus();
+        genderField.value = ""; // clear first
+        genderField.dispatchEvent(new Event('input', { bubbles: true }));
         
-        "--- Thông tin bé ---\n" +
-        "Họ tên: " + data[7] + "\n" +
-        "Ngày sinh: " + data[8] + "\n" +
-        "Ghi bằng chữ: " + data[9] + "\n" +
-        "Nơi sinh: " + data[10] + "\n" +
-        "Giới tính: " + data[11] + "\n" +
-        "Dân tộc: " + data[12] + "\n" +
-        "Quốc tịch: " + data[13] + "\n" +
-        "Quê quán: " + data[14] + "\n\n" +
+        // Type value
+        genderField.value = data[11];
+        genderField.dispatchEvent(new Event('input', { bubbles: true }));
 
-        "--- Thông tin cha ---\n" +
-        "Họ tên: " + data[15] + "\n" +
-        "Năm sinh: " + data[16] + "\n" +
-        "Dân tộc: " + data[17] + "\n" +
-        "Quốc tịch: " + data[18] + "\n" +
-        "Địa chỉ 1: " + data[19] + "\n" +
-        "Địa chỉ 2: " + data[20] + "\n\n" +
+        // Simulate Enter key
+        genderField.dispatchEvent(new KeyboardEvent('keydown', {
+            key: "Enter",
+            code: "Enter",
+            keyCode: 13,
+            which: 13,
+            bubbles: true
+        }));
 
-        "--- Thông tin mẹ ---\n" +
-        "Họ tên: " + data[21] + "\n" +
-        "Năm sinh: " + data[22] + "\n" +
-        "Dân tộc: " + data[23] + "\n" +
-        "Quốc tịch: " + data[24] + "\n" +
-        "Địa chỉ 1: " + data[25] + "\n" +
-        "Địa chỉ 2: " + data[26]
-        );
+        genderField.dispatchEvent(new KeyboardEvent('keyup', {
+            key: "Enter",
+            code: "Enter",
+            keyCode: 13,
+            which: 13,
+            bubbles: true
+        }));
+
+        alert("Test autofill completed for 2 fields.");
 
     } catch (err) {
         alert("Error fetching sheet. Make sure it is shared publicly.");
