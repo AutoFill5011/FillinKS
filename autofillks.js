@@ -1,25 +1,26 @@
 (async function () {
 
-    const sheetURL = "https://docs.google.com/spreadsheets/d/1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE/edit?usp=sharing";
+    const sheetURL = "https://docs.google.com/spreadsheets/d/1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE/export?format=csv";
 
-    // 1️⃣ Get passport from form
-    const passportField = document.querySelector('input[name="passportNumber"]');
-    if (!passportField) {
-        alert("Passport field not found.");
+    // 1️⃣ Ask passport manually
+    const passportInput = prompt("Enter passport number:");
+
+    if (!passportInput) {
+        alert("No passport entered.");
         return;
     }
 
-    const passport = passportField.value.trim().toLowerCase();
-    if (!passport) {
-        alert("Please enter passport number first.");
-        return;
-    }
+    const passport = passportInput.trim().toLowerCase();
 
-    // 2️⃣ Fetch sheet
+    // 2️⃣ Fetch sheet CSV
     const response = await fetch(sheetURL);
     const csvText = await response.text();
 
-    const rows = csvText.split("\n").map(r => r.split(","));
+    // Remove header row
+    const rows = csvText
+        .split("\n")
+        .slice(1)
+        .map(r => r.split(","));
 
     // 3️⃣ Filter rows by passport (Column C = index 2)
     const passportMatches = rows.filter(row =>
@@ -31,7 +32,7 @@
         return;
     }
 
-    // 4️⃣ Ask user timestamp
+    // 4️⃣ Ask timestamp
     const userInput = prompt("Enter timestamp (d/m/yyyy hh:mm:ss)");
 
     if (!userInput) {
