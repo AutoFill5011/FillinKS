@@ -106,38 +106,43 @@
         });
 
         // --------- FIELD 1: Họ và tên bé (input 9) ---------
-        const babyNameInput = elements[9];
-        babyNameInput.focus();
-        babyNameInput.value = data[7];
-        babyNameInput.dispatchEvent(new Event("input", { bubbles: true }));
+        document.querySelectorAll("input")[9].value = data[7];
 
-        function setInputWithEnter(input, value) {
-            input.focus();
+        function fillDropdownInput(inputEl, value) {
+            inputEl.focus();
 
-            // Clear existing value
-            input.value = "";
-            input.dispatchEvent(new Event("input", { bubbles: true }));
+            // Clear existing text
+            inputEl.value = "";
+            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
 
-            // Type value
-            input.value = value;
-            input.dispatchEvent(new Event("input", { bubbles: true }));
+            // Type value character by character
+            for (let char of value) {
+                inputEl.value += char;
+                inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+            }
 
             // Press Enter
-            input.dispatchEvent(
-                new KeyboardEvent("keydown", {
-                    bubbles: true,
-                    cancelable: true,
-                      key: "Enter",
-                    code: "Enter",
-                    keyCode: 13,
-                    which: 13
-                })
-            );
+            inputEl.dispatchEvent(new KeyboardEvent("keydown", {
+                bubbles: true,
+                cancelable: true,
+                key: "Enter",
+                code: "Enter"
+            }));
+
+            inputEl.dispatchEvent(new KeyboardEvent("keyup", {
+                bubbles: true,
+                cancelable: true,
+                key: "Enter",
+                code: "Enter"
+            }));
         }
         // --------- FIELD 2: Giới tính (input 12) ---------
+        const genderInput = document.querySelectorAll("input")[12];
 
-        const genderInput = elements[12];
-        setInputWithEnter(genderInput, data[11]); // "Nam" or "Nữ"
+        // Normalize gender from sheet
+        let gender = data[11].toLowerCase().includes("nam") ? "Nam" : "Nữ";
+
+        fillDropdownInput(genderInput, gender);
 
         alert("Test autofill completed for 2 fields.");
 
