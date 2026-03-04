@@ -52,18 +52,47 @@
             return;
         }
 
-        // 5️⃣ Extract B, C, D, E
-        const name = match[1];
-        const passportNumber = match[2];
-        const placeOfIssue = match[3];
-        const dateOfIssue = match[4];
+        // 5️⃣ Extract all data
+        const data = match;
 
         alert(
-            "MATCH FOUND:\n\n" +
-            "Họ và tên: " + name + "\n" +
-            "Số hộ chiếu: " + passportNumber + "\n" +
-            "Nơi cấp: " + placeOfIssue + "\n" +
-            "Ngày cấp: " + dateOfIssue
+        "===== MATCH FOUND =====\n\n" +
+
+        "Timestamp: " + data[0] + "\n\n" +
+
+        "--- Người yêu cầu ---\n" +
+        "Họ và tên: " + data[1] + "\n" +
+        "Số hộ chiếu: " + data[2] + "\n" +
+        "Nơi cấp hộ chiếu: " + data[3] + "\n" +
+        "Ngày cấp hộ chiếu: " + data[4] + "\n" +
+        "Nơi cư trú: " + data[5] + "\n" +
+        "Quan hệ: " + data[6] + "\n\n" +
+        
+        "--- Thông tin bé ---\n" +
+        "Họ tên: " + data[7] + "\n" +
+        "Ngày sinh: " + data[8] + "\n" +
+        "Ghi bằng chữ: " + data[9] + "\n" +
+        "Nơi sinh: " + data[10] + "\n" +
+        "Giới tính: " + data[11] + "\n" +
+        "Dân tộc: " + data[12] + "\n" +
+        "Quốc tịch: " + data[13] + "\n" +
+        "Quê quán: " + data[14] + "\n\n" +
+
+        "--- Thông tin cha ---\n" +
+        "Họ tên: " + data[15] + "\n" +
+        "Năm sinh: " + data[16] + "\n" +
+        "Dân tộc: " + data[17] + "\n" +
+        "Quốc tịch: " + data[18] + "\n" +
+        "Địa chỉ 1: " + data[19] + "\n" +
+        "Địa chỉ 2: " + data[20] + "\n\n" +
+
+        "--- Thông tin mẹ ---\n" +
+        "Họ tên: " + data[21] + "\n" +
+        "Năm sinh: " + data[22] + "\n" +
+        "Dân tộc: " + data[23] + "\n" +
+        "Quốc tịch: " + data[24] + "\n" +
+        "Địa chỉ 1: " + data[25] + "\n" +
+        "Địa chỉ 2: " + data[26]
         );
 
     } catch (err) {
