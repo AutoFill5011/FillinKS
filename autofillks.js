@@ -1,62 +1,76 @@
-javascript:(async function(){
-  function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+(async function () {
 
-  function setNativeValue(el,val){
-    const proto = Object.getPrototypeOf(el);
-    const desc =
-      Object.getOwnPropertyDescriptor(proto,'value') ||
-      Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value');
-    if(desc && desc.set) desc.set.call(el,val);
-    else el.value = val;
-    el.dispatchEvent(new Event('input',{bubbles:true}));
-    el.dispatchEvent(new Event('change',{bubbles:true}));
-  }
+    const sheetURL = "https://docs.google.com/spreadsheets/d/1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE/edit?usp=sharing";
 
-  function pressEnter(el){
-    el.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',keyCode:13,which:13,bubbles:true}));
-    el.dispatchEvent(new KeyboardEvent('keyup',{key:'Enter',keyCode:13,which:13,bubbles:true}));
-  }
+    // 1️⃣ Get passport from form
+    const passportField = document.querySelector('input[name="passportNumber"]');
+    if (!passportField) {
+        alert("Passport field not found.");
+        return;
+    }
 
-  function inputByForm(name){
-    return document.querySelector("input[formcontrolname='"+name+"']");
-  }
+    const passport = passportField.value.trim().toLowerCase();
+    if (!passport) {
+        alert("Please enter passport number first.");
+        return;
+    }
 
-  function vtsByIndex(i){
-    return document.querySelectorAll(
-      "vts-select-top-control input.vts-select-selection-search-input"
-    )[i];
-  }
+    // 2️⃣ Fetch sheet
+    const response = await fetch(sheetURL);
+    const csvText = await response.text();
 
-  try{
-    alert("Autofill: first 7 fields");
+    const rows = csvText.split("\n").map(r => r.split(","));
 
-    // ---- TEXT FIELDS ----
-    setNativeValue(inputByForm('rpFirstName'),'Nguyễn');
-    setNativeValue(inputByForm('rpMiddleName'),'Quang');
-    setNativeValue(inputByForm('rpLastName'),'Hiệp');
-    setNativeValue(inputByForm('rpBirthYear'),'2025');
+    // 3️⃣ Filter rows by passport (Column C = index 2)
+    const passportMatches = rows.filter(row =>
+        row[2] && row[2].trim().toLowerCase() === passport
+    );
 
-    await sleep(120);
+    if (passportMatches.length === 0) {
+        alert("No record found for this passport.");
+        return;
+    }
 
-    // ---- DROPDOWNS (INDEX-BASED, STABLE) ----
-    // index order YOU already discovered:
-    // 0 = Day, 1 = Month, 2 = Gender
+    // 4️⃣ Ask user timestamp
+    const userInput = prompt("Enter timestamp (d/m/yyyy hh:mm:ss)");
 
-    let day = vtsByIndex(0);
-    day.focus(); setNativeValue(day,'20'); pressEnter(day);
-    await sleep(120);
+    if (!userInput) {
+        alert("No timestamp entered.");
+        return;
+    }
 
-    let month = vtsByIndex(1);
-    month.focus(); setNativeValue(month,'03'); pressEnter(month);
-    await sleep(120);
+    // Convert d/m/yyyy → m/d/yyyy
+    function convertFormat(input) {
+        const [datePart, timePart] = input.split(" ");
+        const [day, month, year] = datePart.split("/");
+        return `${month}/${day}/${year} ${timePart}`;
+    }
 
-    let gender = vtsByIndex(2);
-    gender.focus(); setNativeValue(gender,'Nam'); pressEnter(gender);
+    const convertedTimestamp = convertFormat(userInput);
 
-    alert("DONE — first 7 fields filled correctly");
+    // 5️⃣ Find exact match (Column A = index 0)
+    const exactMatch = passportMatches.find(row =>
+        row[0] && row[0].trim() === convertedTimestamp
+    );
 
-  }catch(e){
-    alert("ERROR: "+e);
-    console.error(e);
-  }
+    if (!exactMatch) {
+        alert("Timestamp not matched.");
+        return;
+    }
+
+    // 6️⃣ Extract columns B, C, D, E
+    const name = exactMatch[1];
+    const passportNumber = exactMatch[2];
+    const placeOfIssue = exactMatch[3];
+    const dateOfIssue = exactMatch[4];
+
+    // 7️⃣ Show result
+    alert(
+        "MATCH FOUND:\n\n" +
+        "Họ và tên: " + name + "\n" +
+        "Số hộ chiếu: " + passportNumber + "\n" +
+        "Nơi cấp: " + placeOfIssue + "\n" +
+        "Ngày cấp: " + dateOfIssue
+    );
+
 })();
