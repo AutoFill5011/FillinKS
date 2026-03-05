@@ -117,6 +117,125 @@ visible[9].dispatchEvent(new Event("input",{bubbles:true}));
 
 alert("STEP A: Baby name filled -> "+data[7]);
 
+(async function () {
+
+const sheetID = "1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
+const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
+
+// 1️⃣ Ask passport
+const passportInput = prompt("Enter passport number:");
+if (!passportInput) {
+    alert("No passport entered.");
+    return;
+}
+
+const passport = passportInput.trim().toLowerCase();
+
+// 2️⃣ Ask timestamp
+const timestampInput = prompt("Enter timestamp (d/m/yyyy hh:mm:ss)");
+if (!timestampInput) {
+    alert("No timestamp entered.");
+    return;
+}
+
+function convertFormat(input){
+    const [datePart,timePart] = input.split(" ");
+    const [day,month,year] = datePart.split("/");
+    return `${month}/${day}/${year} ${timePart}`;
+}
+
+const convertedTimestamp = convertFormat(timestampInput);
+
+try{
+
+// 3️⃣ Fetch sheet
+const response = await fetch(sheetURL);
+const csvText = await response.text();
+
+// CSV parser (handles commas in addresses)
+function parseCSV(text){
+
+    const rows=[];
+    let row=[];
+    let value='';
+    let insideQuotes=false;
+
+    for(let i=0;i<text.length;i++){
+
+        const char=text[i];
+        const nextChar=text[i+1];
+
+        if(char === '"' && insideQuotes && nextChar === '"'){
+            value+='"';
+            i++;
+        }
+
+        else if(char === '"'){
+            insideQuotes=!insideQuotes;
+        }
+
+        else if(char === ',' && !insideQuotes){
+            row.push(value);
+            value='';
+        }
+
+        else if((char === '\n' || char === '\r') && !insideQuotes){
+            if(value!=='' || row.length>0){
+                row.push(value);
+                rows.push(row);
+                row=[];
+                value='';
+            }
+        }
+
+        else{
+            value+=char;
+        }
+    }
+
+    if(value!==''){
+        row.push(value);
+        rows.push(row);
+    }
+
+    return rows;
+}
+
+const rows=parseCSV(csvText).slice(1);
+
+// 4️⃣ Find row
+const match=rows.find(row =>
+    row[2] && row[2].trim().toLowerCase()===passport &&
+    row[0] && row[0].trim()===convertedTimestamp
+);
+
+if(!match){
+    alert("No matching record found.");
+    return;
+}
+
+const data=match;
+
+// ===== GET VISIBLE INPUTS (same logic as your labeling script) =====
+
+let elements=document.querySelectorAll("input, select, textarea");
+let visible=[];
+
+elements.forEach(el=>{
+    if(el.offsetParent!==null){
+        visible.push(el);
+    }
+});
+
+alert("Visible form fields detected: "+visible.length);
+
+// ===== FIELD 1: BABY NAME =====
+
+visible[9].value=data[7];
+visible[9].dispatchEvent(new Event("input",{bubbles:true}));
+
+alert("STEP A: Baby name filled -> "+data[7]);
+
 // ===== FIELD 2: GENDER DEBUG =====
 
 function sleep(ms){
