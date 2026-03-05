@@ -112,47 +112,88 @@
 
         // --------- FIELD 2: Giới tính (input 12) ---------
 
+// --------- FIELD 2: Giới tính (input 12) DEBUG ---------
+
 function sleep(ms){
     return new Promise(r => setTimeout(r, ms));
 }
 
-const genderInput = document.querySelectorAll("input")[12];
+let genderRaw = data[11];
+alert("STEP 1: Gender from sheet = " + genderRaw);
 
-// Normalize gender from sheet
-let gender = data[11].toLowerCase().includes("nam") ? "Nam" : "Nữ";
+// normalize value
+let gender = genderRaw && genderRaw.toLowerCase().includes("nam") ? "Nam" : "Nữ";
+alert("STEP 2: Normalized gender = " + gender);
 
-async function selectGender(){
+// get visible inputs same as labeling script
+const elements = document.querySelectorAll("input, select, textarea");
+let visible = [];
 
-    genderInput.focus();
-    genderInput.click();
-
-    await sleep(500);
-
-    // find dropdown options
-    let options = document.querySelectorAll(".vts-select-item-option");
-
-    if(options.length === 0){
-        alert("Dropdown opened but no options detected.");
-        return;
+elements.forEach(el=>{
+    if(el.offsetParent !== null){
+        visible.push(el);
     }
+});
 
-    let target = null;
+alert("STEP 3: Visible elements count = " + visible.length);
 
-    options.forEach(o=>{
-        if(o.innerText.trim() === gender){
-            target = o;
-        }
-    });
+let genderField = visible[12];
 
-    if(!target){
-        alert("Gender option not found: " + gender);
-        return;
-    }
-
-    target.click();
+if(!genderField){
+    alert("STEP 4: Gender field NOT found");
+    return;
 }
 
-await selectGender();
+alert("STEP 4: Gender field found");
+
+// open dropdown
+genderField.focus();
+alert("STEP 5: Focused gender field");
+
+genderField.click();
+alert("STEP 6: Clicked gender field (dropdown should open)");
+
+await sleep(700);
+alert("STEP 7: Waited for dropdown");
+
+// find dropdown options
+let options = document.querySelectorAll(".vts-select-item-option");
+
+alert("STEP 8: Found " + options.length + " dropdown options");
+
+if(options.length === 0){
+    alert("ERROR: No dropdown options detected.");
+    return;
+}
+
+// show all options for debugging
+let optionNames = [];
+options.forEach(o=>{
+    optionNames.push(o.innerText.trim());
+});
+
+alert("STEP 9: Options detected:\n\n" + optionNames.join("\n"));
+
+// find correct option
+let target = null;
+
+options.forEach(o=>{
+    if(o.innerText.trim() === gender){
+        target = o;
+    }
+});
+
+if(!target){
+    alert("STEP 10: Target gender NOT found");
+    return;
+}
+
+alert("STEP 10: Target gender found -> " + gender);
+
+// click option
+target.click();
+
+alert("STEP 11: Gender selected successfully");
 
     } catch (err) {
         alert("Error fetching sheet. Make sure it is shared publicly.");
