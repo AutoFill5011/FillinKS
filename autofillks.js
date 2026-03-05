@@ -110,35 +110,49 @@
 
         // --------- FIELD 2: Giới tính (input 12) ---------
 
-        function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+        // --------- FIELD 2: Giới tính (input 12) ---------
 
-        const genderInput = document.querySelectorAll("input")[12];
+function sleep(ms){
+    return new Promise(r => setTimeout(r, ms));
+}
 
-        // Normalize gender from sheet
-        let gender = data[11].toLowerCase().includes("nam") ? "Nam" : "Nữ";
+const genderInput = document.querySelectorAll("input")[12];
 
-        // Open dropdown
-        genderInput.focus();
-        genderInput.click();
+// Normalize gender from sheet
+let gender = data[11].toLowerCase().includes("nam") ? "Nam" : "Nữ";
 
-        await sleep(500);
+async function selectGender(){
 
-        // Find dropdown options
-        let options = document.querySelectorAll(".vts-select-item-option");
+    genderInput.focus();
+    genderInput.click();
 
-        let target = null;
+    await sleep(500);
 
-        options.forEach(o=>{
-            if(o.innerText.trim() === gender){
-                target = o;
-            }
-        });
+    // find dropdown options
+    let options = document.querySelectorAll(".vts-select-item-option");
 
-        if(target){
-            target.click();
-        }else{
-            alert("Gender option not found");
+    if(options.length === 0){
+        alert("Dropdown opened but no options detected.");
+        return;
+    }
+
+    let target = null;
+
+    options.forEach(o=>{
+        if(o.innerText.trim() === gender){
+            target = o;
         }
+    });
+
+    if(!target){
+        alert("Gender option not found: " + gender);
+        return;
+    }
+
+    target.click();
+}
+
+await selectGender();
 
     } catch (err) {
         alert("Error fetching sheet. Make sure it is shared publicly.");
