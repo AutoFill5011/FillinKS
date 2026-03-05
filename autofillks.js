@@ -1,4 +1,4 @@
-(async function () {
+    (async function () {
 
     // 🔴 Replace with your sheet ID only
     const sheetID = "1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
@@ -108,43 +108,37 @@
         // --------- FIELD 1: Họ và tên bé (input 9) ---------
         document.querySelectorAll("input")[9].value = data[7];
 
-        function fillDropdownInput(inputEl, value) {
-            inputEl.focus();
-
-            // Clear existing text
-            inputEl.value = "";
-            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-
-            // Type value character by character
-            for (let char of value) {
-                inputEl.value += char;
-                inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-            }
-
-            // Press Enter
-            inputEl.dispatchEvent(new KeyboardEvent("keydown", {
-                bubbles: true,
-                cancelable: true,
-                key: "Enter",
-                code: "Enter"
-            }));
-
-            inputEl.dispatchEvent(new KeyboardEvent("keyup", {
-                bubbles: true,
-                cancelable: true,
-                key: "Enter",
-                code: "Enter"
-            }));
-        }
         // --------- FIELD 2: Giới tính (input 12) ---------
+
+        function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
         const genderInput = document.querySelectorAll("input")[12];
 
         // Normalize gender from sheet
         let gender = data[11].toLowerCase().includes("nam") ? "Nam" : "Nữ";
 
-        fillDropdownInput(genderInput, gender);
+        // Open dropdown
+        genderInput.focus();
+        genderInput.click();
 
-        alert("Test autofill completed for 2 fields.");
+        await sleep(500);
+
+        // Find dropdown options
+        let options = document.querySelectorAll(".vts-select-item-option");
+
+        let target = null;
+
+        options.forEach(o=>{
+            if(o.innerText.trim() === gender){
+                target = o;
+            }
+        });
+
+        if(target){
+            target.click();
+        }else{
+            alert("Gender option not found");
+        }
 
     } catch (err) {
         alert("Error fetching sheet. Make sure it is shared publicly.");
