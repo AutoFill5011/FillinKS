@@ -108,92 +108,90 @@
         // --------- FIELD 1: Họ và tên bé (input 9) ---------
         document.querySelectorAll("input")[9].value = data[7];
 
-        // --------- FIELD 2: Giới tính (input 12) ---------
 
-        // --------- FIELD 2: Giới tính (input 12) ---------
 
-// --------- FIELD 2: Giới tính (input 12) DEBUG ---------
+        // --------- FIELD 2: Giới tính (input 12) DEBUG ---------
 
-function sleep(ms){
-    return new Promise(r => setTimeout(r, ms));
-}
+        function sleep(ms){
+            return new Promise(r => setTimeout(r, ms));
+        }
 
-let genderRaw = data[11];
-alert("STEP 1: Gender from sheet = " + genderRaw);
+        let genderRaw = data[11];
+        alert("STEP 1: Gender from sheet = " + genderRaw);
+        
+        // normalize value
+        let gender = genderRaw && genderRaw.toLowerCase().includes("nam") ? "Nam" : "Nữ";
+        alert("STEP 2: Normalized gender = " + gender);
 
-// normalize value
-let gender = genderRaw && genderRaw.toLowerCase().includes("nam") ? "Nam" : "Nữ";
-alert("STEP 2: Normalized gender = " + gender);
+        // get visible inputs same as labeling script
+        const elements = document.querySelectorAll("input, select, textarea");
+        let visible = [];
 
-// get visible inputs same as labeling script
-const elements = document.querySelectorAll("input, select, textarea");
-let visible = [];
+        elements.forEach(el=>{
+            if(el.offsetParent !== null){
+                visible.push(el);
+            }
+        });
 
-elements.forEach(el=>{
-    if(el.offsetParent !== null){
-        visible.push(el);
-    }
-});
+        alert("STEP 3: Visible elements count = " + visible.length);
 
-alert("STEP 3: Visible elements count = " + visible.length);
+        let genderField = visible[12];
 
-let genderField = visible[12];
+        if(!genderField){
+            alert("STEP 4: Gender field NOT found");
+            return;
+        }
 
-if(!genderField){
-    alert("STEP 4: Gender field NOT found");
-    return;
-}
+        alert("STEP 4: Gender field found");
 
-alert("STEP 4: Gender field found");
+        // open dropdown
+        genderField.focus();
+        alert("STEP 5: Focused gender field");
 
-// open dropdown
-genderField.focus();
-alert("STEP 5: Focused gender field");
+        genderField.click();
+        alert("STEP 6: Clicked gender field (dropdown should open)");
 
-genderField.click();
-alert("STEP 6: Clicked gender field (dropdown should open)");
+        await sleep(700);
+        alert("STEP 7: Waited for dropdown");
 
-await sleep(700);
-alert("STEP 7: Waited for dropdown");
+         // find dropdown options
+        let options = document.querySelectorAll(".vts-select-item-option");
 
-// find dropdown options
-let options = document.querySelectorAll(".vts-select-item-option");
+        alert("STEP 8: Found " + options.length + " dropdown options");
 
-alert("STEP 8: Found " + options.length + " dropdown options");
+        if(options.length === 0){
+            alert("ERROR: No dropdown options detected.");
+            return;
+        }
 
-if(options.length === 0){
-    alert("ERROR: No dropdown options detected.");
-    return;
-}
+        // show all options for debugging
+        let optionNames = [];
+        options.forEach(o=>{
+            optionNames.push(o.innerText.trim());
+        });
 
-// show all options for debugging
-let optionNames = [];
-options.forEach(o=>{
-    optionNames.push(o.innerText.trim());
-});
+        alert("STEP 9: Options detected:\n\n" + optionNames.join("\n"));
 
-alert("STEP 9: Options detected:\n\n" + optionNames.join("\n"));
+        // find correct option
+        let target = null;
 
-// find correct option
-let target = null;
+        options.forEach(o=>{
+            if(o.innerText.trim() === gender){
+                target = o;
+            }
+        });
 
-options.forEach(o=>{
-    if(o.innerText.trim() === gender){
-        target = o;
-    }
-});
+        if(!target){
+            alert("STEP 10: Target gender NOT found");
+            return;
+        }
 
-if(!target){
-    alert("STEP 10: Target gender NOT found");
-    return;
-}
+        alert("STEP 10: Target gender found -> " + gender);
 
-alert("STEP 10: Target gender found -> " + gender);
+        // click option
+        target.click();
 
-// click option
-target.click();
-
-alert("STEP 11: Gender selected successfully");
+        alert("STEP 11: Gender selected successfully");
 
     } catch (err) {
         alert("Error fetching sheet. Make sure it is shared publicly.");
