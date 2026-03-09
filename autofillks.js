@@ -228,7 +228,7 @@ let parts = dob.split("/");
 
 let month = parseInt(parts[0]).toString();
 let day = parseInt(parts[1]).toString();
-let year = parts[2];
+let babyyear = parts[2];
 
 alert(
 "DOB parsed:\n\n"+
@@ -237,10 +237,15 @@ alert(
 "\nYear: "+year
 );
 
+//Baby's Day
 alert("Opening day dropdown");
 
 visible[13].focus();
 visible[13].click();
+
+// type the value to filter dropdown
+visible[13].value = day;
+visible[13].dispatchEvent(new Event("input",{bubbles:true}));
 
 await sleep(500);
 
@@ -249,23 +254,32 @@ options=document.querySelectorAll(".vts-select-item-option");
 target=null;
 
 options.forEach(o=>{
-if(o.innerText.trim()==day){
+let text=o.innerText.trim();
+
+// normalize leading zero
+if(parseInt(text)==parseInt(day)){
 target=o;
 }
 });
 
 if(target){
 target.click();
-alert("Day selected: "+day);
+alert("Day selected: "+target.innerText);
 }else{
 alert("Day option not found");
 }
+
+//Baby's Month
+alert("Opening month dropdown");
 
 alert("Opening month dropdown");
 
 visible[14].focus();
 visible[14].click();
 
+visible[14].value = month;
+visible[14].dispatchEvent(new Event("input",{bubbles:true}));
+
 await sleep(500);
 
 options=document.querySelectorAll(".vts-select-item-option");
@@ -273,40 +287,22 @@ options=document.querySelectorAll(".vts-select-item-option");
 target=null;
 
 options.forEach(o=>{
-if(o.innerText.trim()==month){
+let text=o.innerText.trim();
+
+if(parseInt(text)==parseInt(month)){
 target=o;
 }
 });
 
 if(target){
 target.click();
-alert("Month selected: "+month);
+alert("Month selected: "+target.innerText);
 }else{
 alert("Month option not found");
 }
 
-alert("Opening year dropdown");
-
-visible[15].focus();
-visible[15].click();
-
-await sleep(500);
-
-options=document.querySelectorAll(".vts-select-item-option");
-
-target=null;
-
-options.forEach(o=>{
-if(o.innerText.trim()==year){
-target=o;
-}
-});
-
-if(target){
-target.click();
-alert("Year selected: "+year);
-}else{
-alert("Year option not found");
-}
+//Baby's Year
+visible[15].value = babyyear;
+visible[15].dispatchEvent(new Event("input",{bubbles:true}));
 
 })();
