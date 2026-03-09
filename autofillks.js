@@ -355,6 +355,61 @@ visible[33].value = motherYear;
 visible[33].dispatchEvent(new Event("input",{bubbles:true}));
 
 // ========================
+//Mother's Ethnicity
+// ========================
+let motherEthnicityRaw = match[23];
+
+let motherEthnicity = motherEthnicityRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+// special conversion
+if(motherEthnicity === "Tày"){
+motherEthnicity = "Tay";
+}
+
+// type to filter
+await selectDropdown(34,motherEthnicity,true);
+
+// ========================
+//Mother's city
+// ========================
+await selectDropdown(38,"nhật",false);
+
+// ========================
+//Mother's place status
+// ========================
+await selectDropdown(39,"nơi",false);
+
+// ========================
+// MOTHER ADDRESS
+// ========================
+
+let motherAddr1 = match[25]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+let motherAddr2 = "";
+
+if(match[26]){
+motherAddr2 = match[26]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+}
+
+let motherAddress = motherAddr1;
+
+if(motherAddr2 !== ""){
+motherAddress = motherAddr1 + ", " + motherAddr2;
+}
+
+visible[42].value = motherAddress;
+visible[42].dispatchEvent(new Event("input",{bubbles:true}));
+
+// ========================
 // FATHER NAME
 // ========================
 
@@ -408,5 +463,60 @@ let fatherYear = match[16]
 
 visible[53].value = fatherYear;
 visible[53].dispatchEvent(new Event("input",{bubbles:true}));
+
+// ========================
+//Father's Ethnicity
+// ========================
+let fatherEthnicityRaw = match[17];
+
+let fatherEthnicity = fatherEthnicityRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+// special conversion
+if(fatherEthnicity === "Tày"){
+fatherEthnicity = "Tay";
+}
+
+// type to filter
+await selectDropdown(54,fatherEthnicity,true);
+
+// ========================
+//Father's city
+// ========================
+await selectDropdown(58,"nhật",false);
+
+// ========================
+//Father's place status
+// ========================
+await selectDropdown(59,"nơi",false);
+
+// ========================
+// MOTHER ADDRESS
+// ========================
+
+let motherAddr1 = match[25]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+let motherAddr2 = "";
+
+if(match[26]){
+motherAddr2 = match[26]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+}
+
+let motherAddress = motherAddr1;
+
+if(motherAddr2 !== ""){
+motherAddress = motherAddr1 + ", " + motherAddr2;
+}
+
+visible[42].value = motherAddress;
+visible[42].dispatchEvent(new Event("input",{bubbles:true}));
     
 })();
