@@ -62,8 +62,6 @@ target.click();
 const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
 const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
 
-alert("Loading.......");
-    
 let response=await fetch(sheetURL);
 let csv=await response.text();
 
