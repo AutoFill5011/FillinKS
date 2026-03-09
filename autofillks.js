@@ -278,8 +278,6 @@ visible[15].dispatchEvent(new Event("input",{bubbles:true}));
 // ========================
 //Baby's Birth place
 // ========================
-alert("Opening nationality dropdown");
-
 visible[17].focus();
 visible[17].click();
 
@@ -294,7 +292,7 @@ options=document.querySelectorAll(".vts-select-item-option");
 target=null;
 
 options.forEach(o=>{
-if(o.innerText.trim()=="Nhật Bản"){
+if(o.innerText.trim()=="Nhật Bản (Japanese)"){
 target=o;
 }
 });
