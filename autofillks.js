@@ -39,7 +39,13 @@ target=o;
 
 }else{
 
-if(text.toLowerCase().includes(value.toLowerCase())){
+// numeric safe comparison (fixes 2→02 and prevents 3→30)
+if(!isNaN(value) && parseInt(text)==parseInt(value)){
+target=o;
+}
+
+// normal text partial match (Nhật → Nhật Bản)
+else if(isNaN(value) && text.toLowerCase().includes(value.toLowerCase())){
 target=o;
 }
 
