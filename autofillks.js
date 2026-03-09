@@ -171,8 +171,6 @@ if(cleanedGender.includes("nam")){
 gender = "Nam";
 }
 
-alert("Normalized gender: " + gender);
-
 // ========================
 // YOUR WORKING DROPDOWN METHOD
 // ========================
@@ -183,8 +181,6 @@ if(!genderField){
 alert("Input 12 not found");
 return;
 }
-
-alert("Opening gender dropdown");
 
 genderField.focus();
 genderField.click();
@@ -213,6 +209,104 @@ return;
 
 target.click();
 
-alert("Gender selected: "+gender);
+// ========================
+// BABY DATE OF BIRTH
+// ========================
+
+let dobRaw = match[8];
+
+alert("DOB from sheet: " + dobRaw);
+
+// clean
+let dob = dobRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+// split
+let parts = dob.split("/");
+
+let month = parseInt(parts[0]).toString();
+let day = parseInt(parts[1]).toString();
+let year = parts[2];
+
+alert(
+"DOB parsed:\n\n"+
+"Day: "+day+
+"\nMonth: "+month+
+"\nYear: "+year
+);
+
+alert("Opening day dropdown");
+
+visible[13].focus();
+visible[13].click();
+
+await sleep(500);
+
+options=document.querySelectorAll(".vts-select-item-option");
+
+target=null;
+
+options.forEach(o=>{
+if(o.innerText.trim()==day){
+target=o;
+}
+});
+
+if(target){
+target.click();
+alert("Day selected: "+day);
+}else{
+alert("Day option not found");
+}
+
+alert("Opening month dropdown");
+
+visible[14].focus();
+visible[14].click();
+
+await sleep(500);
+
+options=document.querySelectorAll(".vts-select-item-option");
+
+target=null;
+
+options.forEach(o=>{
+if(o.innerText.trim()==month){
+target=o;
+}
+});
+
+if(target){
+target.click();
+alert("Month selected: "+month);
+}else{
+alert("Month option not found");
+}
+
+alert("Opening year dropdown");
+
+visible[15].focus();
+visible[15].click();
+
+await sleep(500);
+
+options=document.querySelectorAll(".vts-select-item-option");
+
+target=null;
+
+options.forEach(o=>{
+if(o.innerText.trim()==year){
+target=o;
+}
+});
+
+if(target){
+target.click();
+alert("Year selected: "+year);
+}else{
+alert("Year option not found");
+}
 
 })();
