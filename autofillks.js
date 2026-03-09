@@ -7,6 +7,8 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 // ========================
 const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
 const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
+
+alert("Loading.......");
     
 let response=await fetch(sheetURL);
 let csv=await response.text();
@@ -95,7 +97,7 @@ return;
 // ========================
 async function selectDropdown(index,value,exact=true){
 
-let field=visible[index];
+let field = visible[index];
 
 if(!field){
 alert("Input "+index+" not found");
@@ -105,36 +107,46 @@ return;
 field.focus();
 field.click();
 
-// type value to filter dropdown
-field.value=value;
+// type value to trigger dropdown filtering
+field.value = value;
 field.dispatchEvent(new Event("input",{bubbles:true}));
 
-await sleep(500);
+await sleep(700); // give Angular more time
 
-let options=document.querySelectorAll(".vts-select-item-option");
+let options = document.querySelectorAll(".vts-select-item-option");
+
+if(options.length===0){
+alert("No dropdown options detected for input "+index);
+return;
+}
 
 let target=null;
 
-options.forEach(o=>{
+for(let o of options){
 
-let text=o.innerText.trim();
+let text = o.innerText
+.replace(/\s+/g," ")
+.trim();
 
 // exact match
 if(exact && text===value){
 target=o;
+break;
 }
 
-// numeric match (day/month)
-else if(!exact && !isNaN(value) && parseInt(text)==parseInt(value)){
+// numeric match
+if(!exact && !isNaN(value) && parseInt(text)==parseInt(value)){
 target=o;
+break;
 }
 
 // partial text match
-else if(!exact && isNaN(value) && text.includes(value)){
+if(!exact && isNaN(value) && text.includes(value)){
 target=o;
+break;
 }
 
-});
+}
 
 if(!target){
 alert("Dropdown value '"+value+"' not found at input "+index);
