@@ -96,8 +96,6 @@ return;
 
 let fullNameRaw = match[7];   // column containing full name
 
-alert("Full name from sheet: " + fullNameRaw);
-
 // clean name
 let fullName = fullNameRaw
     .replace(/"/g,"")
@@ -115,13 +113,6 @@ if(nameParts.length < 2){
 let surname = nameParts[0];
 let firstName = nameParts[nameParts.length - 1];
 let middleName = nameParts.slice(1, -1).join(" ");
-
-alert(
-"Parsed name:\n\n"+
-"Surname: " + surname +
-"\nMiddle: " + middleName +
-"\nFirst: " + firstName
-);
 
 // ========================
 // FILL FORM INPUTS
@@ -145,16 +136,11 @@ visible[10].dispatchEvent(new Event("input",{bubbles:true}));
 // first name
 visible[11].value = firstName;
 visible[11].dispatchEvent(new Event("input",{bubbles:true}));
-
-alert("Baby name filled successfully");
-
     
 // ========================
 // GET GENDER FROM SHEET
 // ========================
 let genderRaw = match[11];
-
-alert("Gender from sheet (raw): " + genderRaw);
 
 // CLEAN the value
 let cleanedGender = genderRaw
@@ -163,8 +149,6 @@ let cleanedGender = genderRaw
     .trim()
     .toLowerCase();
 
-alert("Gender cleaned: " + cleanedGender);
-
 let gender = "Nữ";
 
 if(cleanedGender.includes("nam")){
@@ -172,7 +156,7 @@ gender = "Nam";
 }
 
 // ========================
-// YOUR WORKING DROPDOWN METHOD
+// WORKING DROPDOWN METHOD
 // ========================
 
 let genderField=visible[12];
@@ -215,8 +199,6 @@ target.click();
 
 let dobRaw = match[8];
 
-alert("DOB from sheet: " + dobRaw);
-
 // clean
 let dob = dobRaw
 .replace(/"/g,"")
@@ -230,16 +212,8 @@ let babyMonth = parseInt(parts[0]).toString();
 let babyDay = parseInt(parts[1]).toString();
 let babyYear = parts[2];
 
-alert(
-"DOB parsed:\n\n"+
-"Day: "+babyDay+
-"\nMonth: "+babyMonth+
-"\nYear: "+babyYear
-);
-
+// ========================
 //Baby's Day
-alert("Opening day dropdown");
-
 visible[13].focus();
 visible[13].click();
 
@@ -264,16 +238,12 @@ target=o;
 
 if(target){
 target.click();
-alert("Day selected: "+target.innerText);
 }else{
 alert("Day option not found");
 }
 
+// ========================
 //Baby's Month
-alert("Opening month dropdown");
-
-alert("Opening month dropdown");
-
 visible[14].focus();
 visible[14].click();
 
@@ -296,13 +266,93 @@ target=o;
 
 if(target){
 target.click();
-alert("Month selected: "+target.innerText);
 }else{
 alert("Month option not found");
 }
 
+// ========================
 //Baby's Year
 visible[15].value = babyYear;
 visible[15].dispatchEvent(new Event("input",{bubbles:true}));
 
+// ========================
+//Baby's Birth place
+// ========================
+alert("Opening nationality dropdown");
+
+visible[17].focus();
+visible[17].click();
+
+// type to filter
+visible[17].value = "nhật";
+visible[17].dispatchEvent(new Event("input",{bubbles:true}));
+
+await sleep(500);
+
+options=document.querySelectorAll(".vts-select-item-option");
+
+target=null;
+
+options.forEach(o=>{
+if(o.innerText.trim()=="Nhật Bản"){
+target=o;
+}
+});
+
+if(target){
+target.click();
+}else{
+alert("Nhật Bản option not found");
+}
+
+// ========================
+//Baby's Hometown
+// ========================
+let rawPlace = match[10];
+
+alert("Place raw: " + rawPlace);
+
+// clean
+let cleanedPlace = rawPlace
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+// cut at first separator
+let firstWord = cleanedPlace.split(/[ \-_,.]/)[0];
+
+// capitalize
+firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1).toLowerCase();
+
+alert("Place processed: " + firstWord);
+
+visible[20].value = firstWord;
+visible[20].dispatchEvent(new Event("input",{bubbles:true}));
+
+alert("Input 20 filled: " + firstWord);
+
+visible[20].value = firstWord;
+visible[20].dispatchEvent(new Event("input",{bubbles:true}));
+
+alert("Input 20 filled: " + firstWord);
+
+// ========================
+//Baby's Ethnicity
+// ========================
+let ethnicityRaw = match[12];
+
+alert("Ethnicity raw: " + ethnicityRaw);
+
+let ethnicity = ethnicityRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+// special conversion
+if(ethnicity === "Tày"){
+ethnicity = "Tay";
+}
+
+alert("Ethnicity processed: " + ethnicity);
+    
 })();
