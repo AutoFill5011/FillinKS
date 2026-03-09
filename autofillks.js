@@ -3,6 +3,60 @@ javascript:(async function(){
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 // ========================
+//Working dropdown select
+// ========================
+async function selectDropdown(index,value,exact=true){
+
+let field=visible[index];
+
+if(!field){
+alert("Input "+index+" not found");
+return;
+}
+
+field.focus();
+field.click();
+
+// type value to filter dropdown
+field.value=value;
+field.dispatchEvent(new Event("input",{bubbles:true}));
+
+await sleep(500);
+
+let options=document.querySelectorAll(".vts-select-item-option");
+
+let target=null;
+
+options.forEach(o=>{
+
+let text=o.innerText.trim();
+
+if(exact){
+
+if(text==value){
+target=o;
+}
+
+}else{
+
+if(text.toLowerCase().includes(value.toLowerCase())){
+target=o;
+}
+
+}
+
+});
+
+if(!target){
+alert("Dropdown value '"+value+"' not found at input "+index);
+return;
+}
+
+target.click();
+}
+
+    
+// ========================
 // LOAD GOOGLE SHEET
 // ========================
 const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
@@ -92,69 +146,7 @@ alert("No matching record found");
 return;
 }
 
-// ========================
-//Working dropdown select
-// ========================
-async function selectDropdown(index,value,exact=true){
 
-let field = visible[index];
-
-if(!field){
-alert("Input "+index+" not found");
-return;
-}
-
-field.focus();
-field.click();
-
-// type value to trigger dropdown filtering
-field.value = value;
-field.dispatchEvent(new Event("input",{bubbles:true}));
-
-await sleep(700); // give Angular more time
-
-let options = document.querySelectorAll(".vts-select-item-option");
-
-if(options.length===0){
-alert("No dropdown options detected for input "+index);
-return;
-}
-
-let target=null;
-
-for(let o of options){
-
-let text = o.innerText
-.replace(/\s+/g," ")
-.trim();
-
-// exact match
-if(exact && text===value){
-target=o;
-break;
-}
-
-// numeric match
-if(!exact && !isNaN(value) && parseInt(text)==parseInt(value)){
-target=o;
-break;
-}
-
-// partial text match
-if(!exact && isNaN(value) && text.includes(value)){
-target=o;
-break;
-}
-
-}
-
-if(!target){
-alert("Dropdown value '"+value+"' not found at input "+index);
-return;
-}
-
-target.click();
-}
     
 // ========================
 // BABY NAME SPLIT
