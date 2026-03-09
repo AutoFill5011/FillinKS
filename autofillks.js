@@ -532,14 +532,34 @@ return v
 .trim()
 .toLowerCase();
 }
+    
+function convertDateMDYtoDMY(dateStr){
 
+let cleaned = dateStr
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+let parts = cleaned.split("/");
+
+if(parts.length !== 3){
+return cleaned; // fallback if format unexpected
+}
+
+let month = parseInt(parts[0]);
+let day = parseInt(parts[1]);
+let year = parts[2];
+
+return day + "/" + month + "/" + year;
+}
+    
 let applicantName = cleanText(match[1]);
 let mName = cleanText(match[21]);
 let fName = cleanText(match[15]);
 
 let valueCol2 = match[2].replace(/"/g,"").replace(/\r/g,"").trim();
 let valueCol3 = match[3].replace(/"/g,"").replace(/\r/g,"").trim();
-let valueCol4 = match[4].replace(/"/g,"").replace(/\r/g,"").trim();
+let valueCol4 = convertDateMDYtoDMY(match[4]);
 
 let issuedPlace = valueCol3;
 // ========================
