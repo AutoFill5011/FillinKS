@@ -48,17 +48,26 @@ alert("Record found");
 // ========================
 // GET GENDER FROM SHEET
 // ========================
-let genderRaw=match[11];
+let genderRaw = match[11];
 
-alert("Gender from sheet: "+genderRaw);
+alert("Gender from sheet (raw): " + genderRaw);
 
-let gender="Nữ";
+// CLEAN the value
+let cleanedGender = genderRaw
+    .replace(/"/g,"")
+    .replace(/\r/g,"")
+    .trim()
+    .toLowerCase();
 
-if(genderRaw && genderRaw.toLowerCase().includes("nam")){
-gender="Nam";
+alert("Gender cleaned: " + cleanedGender);
+
+let gender = "Nữ";
+
+if(cleanedGender === "nam"){
+    gender = "Nam";
 }
 
-alert("Normalized gender: "+gender);
+alert("Normalized gender: " + gender);
 
 // ========================
 // YOUR WORKING DROPDOWN METHOD
