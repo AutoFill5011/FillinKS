@@ -11,7 +11,56 @@ const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=
 let response=await fetch(sheetURL);
 let csv=await response.text();
 
-let rows=csv.split("\n").map(r=>r.split(","));
+function parseCSV(text){
+
+const rows=[];
+let row=[];
+let value='';
+let insideQuotes=false;
+
+for(let i=0;i<text.length;i++){
+
+const char=text[i];
+const next=text[i+1];
+
+if(char=='"' && insideQuotes && next=='"'){
+value+='"';
+i++;
+}
+
+else if(char=='"'){
+insideQuotes=!insideQuotes;
+}
+
+else if(char==',' && !insideQuotes){
+row.push(value);
+value='';
+}
+
+else if((char=='\n'||char=='\r') && !insideQuotes){
+if(value!==''||row.length){
+row.push(value);
+rows.push(row);
+row=[];
+value='';
+}
+}
+
+else{
+value+=char;
+}
+
+}
+
+if(value!==''){
+row.push(value);
+rows.push(row);
+}
+
+return rows;
+}
+
+let rows=parseCSV(csv).slice(1);
 
 let passport=prompt("Enter passport number");
 let timestamp=prompt("Enter timestamp (d/m/yyyy hh:mm:ss)");
@@ -61,8 +110,8 @@ alert("Gender cleaned: " + cleanedGender);
 
 let gender = "Nữ";
 
-if(cleanedGender === "nam"){
-    gender = "Nam";
+if(cleanedGender.includes("nam")){
+gender = "Nam";
 }
 
 alert("Normalized gender: " + gender);
