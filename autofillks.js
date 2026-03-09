@@ -493,30 +493,30 @@ await selectDropdown(58,"nhật",false);
 await selectDropdown(59,"nơi",false);
 
 // ========================
-// MOTHER ADDRESS
+// FATHER ADDRESS
 // ========================
 
-let motherAddr1 = match[25]
+let fatherAddr1 = match[19]
 .replace(/"/g,"")
 .replace(/\r/g,"")
 .trim();
 
-let motherAddr2 = "";
+let fatherAddr2 = "";
 
-if(match[26]){
-motherAddr2 = match[26]
+if(match[20]){
+fatherAddr2 = match[20]
 .replace(/"/g,"")
 .replace(/\r/g,"")
 .trim();
 }
 
-let motherAddress = motherAddr1;
+let fatherAddress = fatherAddr1;
 
-if(motherAddr2 !== ""){
-motherAddress = motherAddr1 + ", " + motherAddr2;
+if(fatherAddr2 !== ""){
+fatherAddress = fatherAddr1 + ", " + fatherAddr2;
 }
 
-visible[42].value = motherAddress;
-visible[42].dispatchEvent(new Event("input",{bubbles:true}));
+visible[62].value = fatherAddress;
+visible[62].dispatchEvent(new Event("input",{bubbles:true}));
     
 })();
