@@ -352,5 +352,35 @@ ethnicity = "Tay";
 }
 
 alert("Ethnicity processed: " + ethnicity);
+
+alert("Opening ethnicity dropdown");
+
+visible[25].focus();
+visible[25].click();
+
+// type to filter
+visible[25].value = ethnicity;
+visible[25].dispatchEvent(new Event("input",{bubbles:true}));
+
+await sleep(500);
+
+options=document.querySelectorAll(".vts-select-item-option");
+
+target=null;
+
+options.forEach(o=>{
+if(o.innerText.trim()==ethnicity){
+target=o;
+}
+});
+
+if(target){
+target.click();
+alert("Ethnicity selected: "+ethnicity);
+}else{
+alert("Ethnicity option not found");
+}
+
+
     
 })();
