@@ -298,6 +298,115 @@ ethnicity = "Tay";
 // type to filter
 await selectDropdown(25,ethnicity,true);
 
+// ========================
+// MOTHER NAME
+// ========================
 
+let motherRaw = match[21];
+
+let motherName = motherRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+let motherParts = motherName.split(/\s+/);
+
+let motherSurname="";
+let motherMiddle="";
+let motherFirst="";
+
+// if only 2 words
+if(motherParts.length == 2){
+
+motherSurname = motherParts[0];
+motherFirst = motherParts[1];
+motherMiddle = "";
+
+}else{
+
+motherSurname = motherParts[0];
+motherFirst = motherParts[motherParts.length-1];
+motherMiddle = motherParts.slice(1,-1).join(" ");
+
+}
+
+// fill inputs
+visible[28].value = motherSurname;
+visible[28].dispatchEvent(new Event("input",{bubbles:true}));
+
+if(motherMiddle !== ""){
+visible[29].value = motherMiddle;
+visible[29].dispatchEvent(new Event("input",{bubbles:true}));
+}
+
+visible[30].value = motherFirst;
+visible[30].dispatchEvent(new Event("input",{bubbles:true}));
+
+// ========================
+// MOTHER BIRTH YEAR
+// ========================
+
+let motherYear = match[22]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+visible[33].value = motherYear;
+visible[33].dispatchEvent(new Event("input",{bubbles:true}));
+
+// ========================
+// FATHER NAME
+// ========================
+
+let fatherRaw = match[15];
+
+let fatherName = fatherRaw
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+let fatherParts = fatherName.split(/\s+/);
+
+let fatherSurname="";
+let fatherMiddle="";
+let fatherFirst="";
+
+if(fatherParts.length == 2){
+
+fatherSurname = fatherParts[0];
+fatherFirst = fatherParts[1];
+fatherMiddle = "";
+
+}else{
+
+fatherSurname = fatherParts[0];
+fatherFirst = fatherParts[fatherParts.length-1];
+fatherMiddle = fatherParts.slice(1,-1).join(" ");
+
+}
+
+// fill inputs
+visible[48].value = fatherSurname;
+visible[48].dispatchEvent(new Event("input",{bubbles:true}));
+
+if(fatherMiddle !== ""){
+visible[49].value = fatherMiddle;
+visible[49].dispatchEvent(new Event("input",{bubbles:true}));
+}
+
+visible[50].value = fatherFirst;
+visible[50].dispatchEvent(new Event("input",{bubbles:true}));
+
+// ========================
+// FATHER BIRTH YEAR
+// ========================
+
+let fatherYear = match[16]
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim();
+
+visible[53].value = fatherYear;
+visible[53].dispatchEvent(new Event("input",{bubbles:true}));
     
 })();
