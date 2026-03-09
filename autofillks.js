@@ -226,15 +226,15 @@ let dob = dobRaw
 // split
 let parts = dob.split("/");
 
-let month = parseInt(parts[0]).toString();
-let day = parseInt(parts[1]).toString();
-let babyyear = parts[2];
+let babyMonth = parseInt(parts[0]).toString();
+let babyDay = parseInt(parts[1]).toString();
+let babyYear = parts[2];
 
 alert(
 "DOB parsed:\n\n"+
-"Day: "+day+
-"\nMonth: "+month+
-"\nYear: "+year
+"Day: "+babyDay+
+"\nMonth: "+babyMonth+
+"\nYear: "+babyYear
 );
 
 //Baby's Day
@@ -244,7 +244,7 @@ visible[13].focus();
 visible[13].click();
 
 // type the value to filter dropdown
-visible[13].value = day;
+visible[13].value = babyDay;
 visible[13].dispatchEvent(new Event("input",{bubbles:true}));
 
 await sleep(500);
@@ -257,7 +257,7 @@ options.forEach(o=>{
 let text=o.innerText.trim();
 
 // normalize leading zero
-if(parseInt(text)==parseInt(day)){
+if(parseInt(text)==parseInt(babyDay)){
 target=o;
 }
 });
@@ -277,7 +277,7 @@ alert("Opening month dropdown");
 visible[14].focus();
 visible[14].click();
 
-visible[14].value = month;
+visible[14].value = babyMonth;
 visible[14].dispatchEvent(new Event("input",{bubbles:true}));
 
 await sleep(500);
@@ -289,7 +289,7 @@ target=null;
 options.forEach(o=>{
 let text=o.innerText.trim();
 
-if(parseInt(text)==parseInt(month)){
+if(parseInt(text)==parseInt(babyMonth)){
 target=o;
 }
 });
@@ -302,7 +302,7 @@ alert("Month option not found");
 }
 
 //Baby's Year
-visible[15].value = babyyear;
+visible[15].value = babyYear;
 visible[15].dispatchEvent(new Event("input",{bubbles:true}));
 
 })();
