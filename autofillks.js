@@ -252,8 +252,6 @@ await selectDropdown(17,"nhật",false);
 // ========================
 let rawPlace = match[10];
 
-alert("Place raw: " + rawPlace);
-
 // clean
 let cleanedPlace = rawPlace
 .replace(/"/g,"")
@@ -266,24 +264,13 @@ let firstWord = cleanedPlace.split(/[ \-_,.]/)[0];
 // capitalize
 firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1).toLowerCase();
 
-alert("Place processed: " + firstWord);
-
 visible[20].value = firstWord;
 visible[20].dispatchEvent(new Event("input",{bubbles:true}));
-
-alert("Input 20 filled: " + firstWord);
-
-visible[20].value = firstWord;
-visible[20].dispatchEvent(new Event("input",{bubbles:true}));
-
-alert("Input 20 filled: " + firstWord);
 
 // ========================
 //Baby's Ethnicity
 // ========================
 let ethnicityRaw = match[12];
-
-alert("Ethnicity raw: " + ethnicityRaw);
 
 let ethnicity = ethnicityRaw
 .replace(/"/g,"")
@@ -294,13 +281,6 @@ let ethnicity = ethnicityRaw
 if(ethnicity === "Tày"){
 ethnicity = "Tay";
 }
-
-alert("Ethnicity processed: " + ethnicity);
-
-alert("Opening ethnicity dropdown");
-
-visible[25].focus();
-visible[25].click();
 
 // type to filter
 await selectDropdown(25,ethnicity,true);
