@@ -176,12 +176,6 @@ alert("Normalized gender: " + gender);
 // ========================
 // YOUR WORKING DROPDOWN METHOD
 // ========================
-let elements=document.querySelectorAll("input,select,textarea");
-let visible=[];
-
-elements.forEach(el=>{
-if(el.offsetParent!==null) visible.push(el);
-});
 
 let genderField=visible[12];
 
