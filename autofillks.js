@@ -90,6 +90,55 @@ alert("No matching record found");
 return;
 }
 
+async function selectDropdown(index,value,exact=true){
+
+let field=visible[index];
+
+if(!field){
+alert("Input "+index+" not found");
+return;
+}
+
+field.focus();
+field.click();
+
+// type value to filter dropdown
+field.value=value;
+field.dispatchEvent(new Event("input",{bubbles:true}));
+
+await sleep(500);
+
+let options=document.querySelectorAll(".vts-select-item-option");
+
+let target=null;
+
+options.forEach(o=>{
+
+let text=o.innerText.trim();
+
+if(exact){
+
+if(text==value){
+target=o;
+}
+
+}else{
+
+if(text.toLowerCase().includes(value.toLowerCase())){
+target=o;
+}
+
+}
+
+});
+
+if(!target){
+alert("Dropdown value '"+value+"' not found at input "+index);
+return;
+}
+
+target.click();
+}
 // ========================
 // BABY NAME SPLIT
 // ========================
@@ -159,39 +208,7 @@ gender = "Nam";
 // WORKING DROPDOWN METHOD
 // ========================
 
-let genderField=visible[12];
-
-if(!genderField){
-alert("Input 12 not found");
-return;
-}
-
-genderField.focus();
-genderField.click();
-
-await sleep(500);
-
-let options=document.querySelectorAll(".vts-select-item-option");
-
-if(options.length==0){
-alert("No dropdown options detected");
-return;
-}
-
-let target=null;
-
-options.forEach(o=>{
-if(o.innerText.trim()==gender){
-target=o;
-}
-});
-
-if(!target){
-alert("Option '"+gender+"' not found");
-return;
-}
-
-target.click();
+await selectDropdown(12,gender,true);
 
 // ========================
 // BABY DATE OF BIRTH
@@ -214,61 +231,11 @@ let babyYear = parts[2];
 
 // ========================
 //Baby's Day
-visible[13].focus();
-visible[13].click();
-
-// type the value to filter dropdown
-visible[13].value = babyDay;
-visible[13].dispatchEvent(new Event("input",{bubbles:true}));
-
-await sleep(500);
-
-options=document.querySelectorAll(".vts-select-item-option");
-
-target=null;
-
-options.forEach(o=>{
-let text=o.innerText.trim();
-
-// normalize leading zero
-if(parseInt(text)==parseInt(babyDay)){
-target=o;
-}
-});
-
-if(target){
-target.click();
-}else{
-alert("Day option not found");
-}
+await selectDropdown(13,babyDay,false);
 
 // ========================
 //Baby's Month
-visible[14].focus();
-visible[14].click();
-
-visible[14].value = babyMonth;
-visible[14].dispatchEvent(new Event("input",{bubbles:true}));
-
-await sleep(500);
-
-options=document.querySelectorAll(".vts-select-item-option");
-
-target=null;
-
-options.forEach(o=>{
-let text=o.innerText.trim();
-
-if(parseInt(text)==parseInt(babyMonth)){
-target=o;
-}
-});
-
-if(target){
-target.click();
-}else{
-alert("Month option not found");
-}
+await selectDropdown(14,babyMonth,false);
 
 // ========================
 //Baby's Year
@@ -278,30 +245,7 @@ visible[15].dispatchEvent(new Event("input",{bubbles:true}));
 // ========================
 //Baby's Birth place
 // ========================
-visible[17].focus();
-visible[17].click();
-
-// type to filter
-visible[17].value = "nhật";
-visible[17].dispatchEvent(new Event("input",{bubbles:true}));
-
-await sleep(500);
-
-options=document.querySelectorAll(".vts-select-item-option");
-
-target=null;
-
-options.forEach(o=>{
-if(o.innerText.trim()=="Nhật Bản (Japanese)"){
-target=o;
-}
-});
-
-if(target){
-target.click();
-}else{
-alert("Nhật Bản option not found");
-}
+await selectDropdown(17,"nhật",false);
 
 // ========================
 //Baby's Hometown
@@ -359,27 +303,7 @@ visible[25].focus();
 visible[25].click();
 
 // type to filter
-visible[25].value = ethnicity;
-visible[25].dispatchEvent(new Event("input",{bubbles:true}));
-
-await sleep(500);
-
-options=document.querySelectorAll(".vts-select-item-option");
-
-target=null;
-
-options.forEach(o=>{
-if(o.innerText.trim()==ethnicity){
-target=o;
-}
-});
-
-if(target){
-target.click();
-alert("Ethnicity selected: "+ethnicity);
-}else{
-alert("Ethnicity option not found");
-}
+await selectDropdown(25,ethnicity,true);
 
 
     
