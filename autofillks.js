@@ -541,13 +541,13 @@ let valueCol2 = match[2].replace(/"/g,"").replace(/\r/g,"").trim();
 let valueCol3 = match[3].replace(/"/g,"").replace(/\r/g,"").trim();
 let valueCol4 = match[4].replace(/"/g,"").replace(/\r/g,"").trim();
 
-
+let issuedPlace = valueCol3;
 // ========================
 // IF MATCH MOTHER
 // ========================
 if(applicantName === mName){
 
-await selectDropdown(43,"hồ",false);
+await selectDropdown(43,"hộ",false);
 
 visible[44].value = valueCol2;
 visible[44].dispatchEvent(new Event("input",{bubbles:true}));
@@ -555,7 +555,8 @@ visible[44].dispatchEvent(new Event("input",{bubbles:true}));
 visible[45].value = valueCol4;
 visible[45].dispatchEvent(new Event("input",{bubbles:true}));
 
-visible[46].value = valueCol3;
+
+visible[46].value = issuedPlace;
 visible[46].dispatchEvent(new Event("input",{bubbles:true}));
 
 }
@@ -566,7 +567,7 @@ visible[46].dispatchEvent(new Event("input",{bubbles:true}));
 // ========================
 else if(applicantName === fName){
 
-await selectDropdown(63,"hồ",false);
+await selectDropdown(63,"hộ",false);
 
 visible[64].value = valueCol2;
 visible[64].dispatchEvent(new Event("input",{bubbles:true}));
@@ -574,7 +575,7 @@ visible[64].dispatchEvent(new Event("input",{bubbles:true}));
 visible[65].value = valueCol4;
 visible[65].dispatchEvent(new Event("input",{bubbles:true}));
 
-visible[66].value = valueCol3;
+visible[66].value = issuedPlace;
 visible[66].dispatchEvent(new Event("input",{bubbles:true}));
 
 }
@@ -587,7 +588,7 @@ else{
 
 alert("Kiểm tra lại tên không trùng");
 
-await selectDropdown(63,"hồ",false);
+await selectDropdown(63,"hộ",false);
 
 visible[64].value = valueCol2;
 visible[64].dispatchEvent(new Event("input",{bubbles:true}));
@@ -595,7 +596,7 @@ visible[64].dispatchEvent(new Event("input",{bubbles:true}));
 visible[65].value = valueCol4;
 visible[65].dispatchEvent(new Event("input",{bubbles:true}));
 
-visible[66].value = valueCol3;
+visible[66].value = issuedPlace;
 visible[66].dispatchEvent(new Event("input",{bubbles:true}));
 
 }
