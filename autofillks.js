@@ -119,19 +119,19 @@ options.forEach(o=>{
 
 let text=o.innerText.trim();
 
-if(exact){
-
-if(text==value){
+// exact match
+if(exact && text===value){
 target=o;
 }
 
-}else{
-
-// numeric-safe comparison
-if(parseInt(text)==parseInt(value)){
+// numeric match (day/month)
+else if(!exact && !isNaN(value) && parseInt(text)==parseInt(value)){
 target=o;
 }
 
+// partial text match
+else if(!exact && isNaN(value) && text.includes(value)){
+target=o;
 }
 
 });
