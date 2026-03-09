@@ -7,8 +7,6 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 // ========================
 const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
 const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
-
-alert("Loading Google Sheet....");
     
 let response=await fetch(sheetURL);
 let csv=await response.text();
@@ -92,8 +90,65 @@ alert("No matching record found");
 return;
 }
 
-alert("Record found");
+// ========================
+// BABY NAME SPLIT
+// ========================
 
+let fullNameRaw = match[7];   // column containing full name
+
+alert("Full name from sheet: " + fullNameRaw);
+
+// clean name
+let fullName = fullNameRaw
+    .replace(/"/g,"")
+    .replace(/\r/g,"")
+    .trim();
+
+let nameParts = fullName.split(/\s+/);
+
+if(nameParts.length < 2){
+    alert("Name format error");
+    return;
+}
+
+// assign parts
+let surname = nameParts[0];
+let firstName = nameParts[nameParts.length - 1];
+let middleName = nameParts.slice(1, -1).join(" ");
+
+alert(
+"Parsed name:\n\n"+
+"Surname: " + surname +
+"\nMiddle: " + middleName +
+"\nFirst: " + firstName
+);
+
+// ========================
+// FILL FORM INPUTS
+// ========================
+
+let elements=document.querySelectorAll("input,select,textarea");
+let visible=[];
+
+elements.forEach(el=>{
+if(el.offsetParent!==null) visible.push(el);
+});
+
+// surname
+visible[9].value = surname;
+visible[9].dispatchEvent(new Event("input",{bubbles:true}));
+
+// middle name(s)
+visible[10].value = middleName;
+visible[10].dispatchEvent(new Event("input",{bubbles:true}));
+
+// first name
+visible[11].value = firstName;
+visible[11].dispatchEvent(new Event("input",{bubbles:true}));
+
+alert("Baby name filled successfully");
+
+    
 // ========================
 // GET GENDER FROM SHEET
 // ========================
