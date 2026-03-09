@@ -1,100 +1,111 @@
-(async function () {
+javascript:(async function(){
 
-function sleep(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
-// =============================
-// STEP 1 — LOAD GOOGLE SHEET
-// =============================
-const sheetID = "1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
-const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
+// ========================
+// LOAD GOOGLE SHEET
+// ========================
+const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
+const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
 
 alert("Loading Google Sheet...");
-let response = await fetch(url);
-let text = await response.text();
 
-// =============================
-// STEP 2 — PARSE CSV
-// =============================
-let rows = text.split("\n").map(r => r.split(","));
+let response=await fetch(sheetURL);
+let csv=await response.text();
 
-let applicationID = prompt("Enter Application ID to load:");
-let match = rows.find(r => r[0] == applicationID);
+let rows=csv.split("\n").map(r=>r.split(","));
 
-if(!match){
-    alert("Application ID not found.");
-    return;
+let passport=prompt("Enter passport number");
+let timestamp=prompt("Enter timestamp (d/m/yyyy hh:mm:ss)");
+
+if(!passport||!timestamp){
+alert("Missing input");
+return;
 }
 
-alert("Application found!");
+// convert timestamp
+function convertFormat(input){
+const [datePart,timePart]=input.split(" ");
+const [day,month,year]=datePart.split("/");
+return `${month}/${day}/${year} ${timePart}`;
+}
 
-// =============================
-// STEP 3 — DETECT VISIBLE FORM FIELDS
-// =============================
-let elements = document.querySelectorAll("input, select, textarea");
-let visible = [];
+let convertedTimestamp=convertFormat(timestamp);
+
+// find matching row
+let match=rows.find(r=>
+r[2] && r[2].trim().toLowerCase()==passport.toLowerCase() &&
+r[0] && r[0].trim()==convertedTimestamp
+);
+
+if(!match){
+alert("No matching record found");
+return;
+}
+
+alert("Record found");
+
+// ========================
+// GET GENDER FROM SHEET
+// ========================
+let genderRaw=match[11];
+
+alert("Gender from sheet: "+genderRaw);
+
+let gender="Nữ";
+
+if(genderRaw && genderRaw.toLowerCase().includes("nam")){
+gender="Nam";
+}
+
+alert("Normalized gender: "+gender);
+
+// ========================
+// YOUR WORKING DROPDOWN METHOD
+// ========================
+let elements=document.querySelectorAll("input,select,textarea");
+let visible=[];
 
 elements.forEach(el=>{
-    if(el.offsetParent !== null){
-        visible.push(el);
-    }
+if(el.offsetParent!==null) visible.push(el);
 });
 
-alert("Visible form fields detected: " + visible.length);
+let genderField=visible[12];
 
-// =============================
-// STEP 4 — FILL BABY NAME
-// =============================
-let babyName = match[7];  // adjust column if needed
+if(!genderField){
+alert("Input 12 not found");
+return;
+}
 
-visible[9].focus();
-visible[9].value = babyName;
-visible[9].dispatchEvent(new Event("input",{bubbles:true}));
-
-alert("STEP A: Baby name filled -> " + babyName);
-
-// =============================
-// STEP 5 — SELECT GENDER
-// =============================
-let genderRaw = match[11];
-
-alert("STEP 1: Gender from sheet = " + genderRaw);
-
-let gender = genderRaw && genderRaw.toLowerCase().includes("nam") ? "Nam" : "Nữ";
-
-alert("STEP 2: Normalized gender = " + gender);
-
-let genderField = visible[12];
+alert("Opening gender dropdown");
 
 genderField.focus();
 genderField.click();
 
-await sleep(700);
+await sleep(500);
 
-// =============================
-// STEP 6 — FIND DROPDOWN OPTIONS
-// =============================
-let options = document.querySelectorAll(".vts-select-item-option");
+let options=document.querySelectorAll(".vts-select-item-option");
 
-alert("STEP 3: options detected = " + options.length);
-
-// =============================
-// STEP 7 — CLICK CORRECT OPTION
-// =============================
-for(let opt of options){
-
-    let txt = opt.innerText.trim();
-
-    if(txt.includes(gender)){
-        opt.click();
-        alert("Gender selected: " + txt);
-        break;
-    }
+if(options.length==0){
+alert("No dropdown options detected");
+return;
 }
 
-})();
+let target=null;
 
+options.forEach(o=>{
+if(o.innerText.trim()==gender){
+target=o;
 }
+});
+
+if(!target){
+alert("Option '"+gender+"' not found");
+return;
+}
+
+target.click();
+
+alert("Gender selected: "+gender);
 
 })();
