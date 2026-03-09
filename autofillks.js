@@ -8,8 +8,6 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 const sheetID="1HJZH2nkqKu0O1Ocfwmk_feByovpOx_N0LqNl8IDf3nE";
 const sheetURL=`https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
 
-alert("Loading Google Sheet...");
-
 let response=await fetch(sheetURL);
 let csv=await response.text();
 
