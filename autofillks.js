@@ -518,5 +518,87 @@ fatherAddress = fatherAddr1 + ", " + fatherAddr2;
 
 visible[62].value = fatherAddress;
 visible[62].dispatchEvent(new Event("input",{bubbles:true}));
-    
+
+
+// ========================
+// APPLICANT NAME CHECK
+// ========================
+
+// helper to clean text
+function cleanText(v){
+return v
+.replace(/"/g,"")
+.replace(/\r/g,"")
+.trim()
+.toLowerCase();
+}
+
+let applicantName = cleanText(match[1]);
+let mName = cleanText(match[21]);
+let fName = cleanText(match[15]);
+
+let valueCol2 = match[2].replace(/"/g,"").replace(/\r/g,"").trim();
+let valueCol3 = match[3].replace(/"/g,"").replace(/\r/g,"").trim();
+let valueCol4 = match[4].replace(/"/g,"").replace(/\r/g,"").trim();
+
+
+// ========================
+// IF MATCH MOTHER
+// ========================
+if(applicantName === mName){
+
+await selectDropdown(43,"hồ",false);
+
+visible[44].value = valueCol2;
+visible[44].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[45].value = valueCol4;
+visible[45].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[46].value = valueCol3;
+visible[46].dispatchEvent(new Event("input",{bubbles:true}));
+
+}
+
+
+// ========================
+// IF MATCH FATHER
+// ========================
+else if(applicantName === fName){
+
+await selectDropdown(63,"hồ",false);
+
+visible[64].value = valueCol2;
+visible[64].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[65].value = valueCol4;
+visible[65].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[66].value = valueCol3;
+visible[66].dispatchEvent(new Event("input",{bubbles:true}));
+
+}
+
+
+// ========================
+// NO MATCH
+// ========================
+else{
+
+alert("Kiểm tra lại tên không trùng");
+
+await selectDropdown(63,"hồ",false);
+
+visible[64].value = valueCol2;
+visible[64].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[65].value = valueCol4;
+visible[65].dispatchEvent(new Event("input",{bubbles:true}));
+
+visible[66].value = valueCol3;
+visible[66].dispatchEvent(new Event("input",{bubbles:true}));
+
+}
+
+alert("Điền form thành công!!!");
 })();
