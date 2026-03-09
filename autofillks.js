@@ -90,6 +90,9 @@ alert("No matching record found");
 return;
 }
 
+// ========================
+//Working dropdown select
+// ========================
 async function selectDropdown(index,value,exact=true){
 
 let field=visible[index];
@@ -124,7 +127,8 @@ target=o;
 
 }else{
 
-if(text.toLowerCase().includes(value.toLowerCase())){
+// numeric-safe comparison
+if(parseInt(text)==parseInt(value)){
 target=o;
 }
 
@@ -139,6 +143,7 @@ return;
 
 target.click();
 }
+    
 // ========================
 // BABY NAME SPLIT
 // ========================
