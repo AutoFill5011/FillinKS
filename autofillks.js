@@ -533,7 +533,7 @@ return v
 .toLowerCase();
 }
     
-function convertDateMDYtoDMY(dateStr){
+function convertDateMDYtoInput(dateStr){
 
 let cleaned = dateStr
 .replace(/"/g,"")
@@ -543,14 +543,18 @@ let cleaned = dateStr
 let parts = cleaned.split("/");
 
 if(parts.length !== 3){
-return cleaned; // fallback if format unexpected
+return cleaned;
 }
 
 let month = parseInt(parts[0]);
 let day = parseInt(parts[1]);
 let year = parts[2];
 
-return day + "/" + month + "/" + year;
+// force 2-digit format
+month = String(month).padStart(2,"0");
+day = String(day).padStart(2,"0");
+
+return day + month + year;
 }
     
 let applicantName = cleanText(match[1]);
@@ -559,7 +563,7 @@ let fName = cleanText(match[15]);
 
 let valueCol2 = match[2].replace(/"/g,"").replace(/\r/g,"").trim();
 let valueCol3 = match[3].replace(/"/g,"").replace(/\r/g,"").trim();
-let valueCol4 = convertDateMDYtoDMY(match[4]);
+let valueCol4 = convertDateMDYtoInput(match[4]);
 
 let issuedPlace = valueCol3;
 // ========================
@@ -572,9 +576,10 @@ await selectDropdown(43,"hộ",false);
 visible[44].value = valueCol2;
 visible[44].dispatchEvent(new Event("input",{bubbles:true}));
 
+visible[45].focus();
 visible[45].value = valueCol4;
 visible[45].dispatchEvent(new Event("input",{bubbles:true}));
-
+visible[45].dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",bubbles:true}));
 
 visible[46].value = issuedPlace;
 visible[46].dispatchEvent(new Event("input",{bubbles:true}));
@@ -592,8 +597,10 @@ await selectDropdown(63,"hộ",false);
 visible[64].value = valueCol2;
 visible[64].dispatchEvent(new Event("input",{bubbles:true}));
 
+visible[65].focus();
 visible[65].value = valueCol4;
 visible[65].dispatchEvent(new Event("input",{bubbles:true}));
+visible[65].dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",bubbles:true}));
 
 visible[66].value = issuedPlace;
 visible[66].dispatchEvent(new Event("input",{bubbles:true}));
@@ -613,8 +620,10 @@ await selectDropdown(63,"hộ",false);
 visible[64].value = valueCol2;
 visible[64].dispatchEvent(new Event("input",{bubbles:true}));
 
+visible[65].focus();
 visible[65].value = valueCol4;
 visible[65].dispatchEvent(new Event("input",{bubbles:true}));
+visible[65].dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",bubbles:true}));
 
 visible[66].value = issuedPlace;
 visible[66].dispatchEvent(new Event("input",{bubbles:true}));
